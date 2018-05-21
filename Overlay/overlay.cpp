@@ -14,7 +14,6 @@ int main(void) {
 		char str[100];
 
 		sprintf_s(str, "D:\\專題-影像處理\\飛機-影像\\TiltForward_1080p\\TiltForward (%d).jpg", x);
-
 		img = imread(str, IMREAD_GRAYSCALE);
 
 		if (img.empty())
@@ -22,6 +21,8 @@ int main(void) {
 		
 		vec.push_back(img.rowRange((img.rows / 2), (img.rows / 2) + 1).clone());
 	}
+
+	Mat img1(Size(img.cols, vec.size()), CV_8UC1);
 
 	for (int x = vec.size() - 1; x >= 0; x--)
 		img1.push_back(vec[x]);
