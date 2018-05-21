@@ -8,6 +8,7 @@ using namespace std;
 
 int main(void) {
 	clock_t start, stop;
+	vector<Point> vec;
 
 	Mat img = imread(FILENAME, IMREAD_REDUCED_GRAYSCALE_4);//把圖檔以原圖的1/4讀進來並轉成灰階
 	if (img.empty())
@@ -24,6 +25,11 @@ int main(void) {
 			}
 		}
 	}
+	if (vec.size())
+		for (int i = 0; i < vec.size() - 1; i++)
+			if (vec[i].x == vec[i + 1].x && int(vec[i + 1].y - vec[i].y) < 10)	//在同一個row上如果col相差在10以內，就將兩點之間的pixel反白
+				for (int x = vec[i].y; x < vec[i + 1].y; x++)
+					img.at<uchar>(vec[i].x, x) = 255;
 
 	stop = clock();
 
@@ -32,7 +38,6 @@ int main(void) {
 	imshow("test", img);
 	imwrite("test.jpg", img);
 	waitKey(0);
-	
 	system("pause");
 	return 0;
 }
