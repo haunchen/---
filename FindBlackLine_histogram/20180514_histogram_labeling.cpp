@@ -34,20 +34,19 @@ int main() {
 	resize(img, img, Size(640, 480));
 
 	for (int x = 0; x < img.rows; x++) {
-		uchar* ptr = img.ptr<uchar>(x);
 		for (int y = 0; y < img.cols; y++) {
 			int i = x / 40, j = y / 40;
 			if ((x % 40) == 0 && (y % 40) == 0)
-				max[i][j] = min[i][j] = *ptr;
-			hist[i][j][*ptr]++;
+				max[i][j] = min[i][j] = img.at<uchar>(x, y);
+			hist[i][j][img.at<uchar>(x, y)]++;
 
-			if (*ptr > max[i][j])
-				max[i][j] = *ptr;
-			if (*ptr < min[i][j])
-				min[i][j] = *ptr;
+			if (img.at<uchar>(x, y) > max[i][j])
+				max[i][j] = img.at<uchar>(x, y);
+			if (img.at<uchar>(x, y) < min[i][j])
+				min[i][j] = img.at<uchar>(x, y);
 
 			avg[i][j][0] = ((min[i][j] + avg[i][j][1]) / 2.0);
-			avg[i][j][1] += (*ptr++ / 1600.0);
+			avg[i][j][1] += (img.at<uchar>(x, y) / 1600.0);
 			avg[i][j][2] = ((max[i][j] + avg[i][j][1]) / 2.0);
 		}
 	}
@@ -78,17 +77,16 @@ int main() {
 		}
 	}
 	for (int x = 0; x < img.rows; x++) {
-		uchar* ptr = img.ptr<uchar>(x);
 		for (int y = 0; y < img.cols; y++) {
 			int i = x / 40, j = y / 40;
 			if ((avg[i][j][6] - avg[i][j][3]) <= 48) {
-				*ptr++ = 0;
+				img.at<uchar>(x, y) = 0;
 			}
 			else {
-				if (*ptr <= (avg[i][j][3] * 1.1))
-					*ptr++ = 255;
+				if (img.at<uchar>(x, y) <= (avg[i][j][3] * 1.1))
+					img.at<uchar>(x, y) = 255;
 				else
-					*ptr++ = 0;
+					img.at<uchar>(x, y) = 0;
 			}
 		}
 	}
@@ -98,12 +96,9 @@ int main() {
 
 	Mat mat(img.size(), CV_8UC1, Scalar(255));
 	for (int x = 0; x < mat.rows; x++) {
-		uchar* ptr = mat.ptr<uchar>(x);
-		int* ptr1 = labelImg.ptr<int>(x);
 		for (int y = 0; y < mat.cols; y++) {
-			if (*ptr1++ == 1)
-				*ptr = 0;
-			*ptr++;
+			if (labelImg.at<int>(x, y) == 1)
+				mat.at<uchar>(x, y) = 0;
 		}
 	}
 
