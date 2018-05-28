@@ -46,7 +46,7 @@ int main() {
 				min[i][j] = img.at<uchar>(x, y);
 
 			avg[i][j][0] = ((min[i][j] + avg[i][j][1]) / 2.0);
-			avg[i][j][1] += (img.at<uchar>(x, y)++ / 1600.0);
+			avg[i][j][1] += (img.at<uchar>(x, y) / 1600.0);
 			avg[i][j][2] = ((max[i][j] + avg[i][j][1]) / 2.0);
 		}
 	}
