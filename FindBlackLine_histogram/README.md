@@ -1,0 +1,1 @@
+將一個frame縮小成640*480，並切割成192個block，計算每個block的histogram
